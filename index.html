@@ -134,9 +134,9 @@ section{scroll-margin-top:20px}
 </svg>
 <div style="flex:1 1 260px;min-width:0"><div class="eyebrow">내 정류장</div><h2>내가 타는 정류장 시간 보기</h2><p class="sub" style="margin-bottom:0">정류장을 고르면 오늘 오는 모든 버스 시각을 보여 드려요.</p></div>
 </div>
-<select id="stopSel" aria-label="정류장 선택" value="{{selStop}}" onChange="{{pickStop}}" style="display:block;width:100%;align-self:stretch;min-height:68px;font:inherit;font-size:20px;font-weight:700;border:0;box-shadow:inset 0 0 0 2px #94A3B8;border-radius:18px;padding:0 22px;background:#F8FAFC;color:#0F172A">
+<div style="position:relative;display:block;width:100%;align-self:stretch"><select id="stopSel" aria-label="정류장 선택" value="{{selStop}}" onChange="{{pickStop}}" style="display:block;width:100%;min-width:100%;max-width:none;margin:0;-webkit-appearance:none;appearance:none;min-height:72px;font:inherit;font-size:22px;font-weight:700;border:0;box-shadow:inset 0 0 0 2px #94A3B8;border-radius:18px;padding:0 64px 0 22px;background:#F8FAFC;color:#0F172A">
 <sc-for list="{{stopOpts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.v}}</option></sc-for>
-</select>
+</select><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true" style="position:absolute;right:20px;top:50%;margin-top:-15px;pointer-events:none;fill:none;stroke:#334155;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"><path d="M6 9l6 6 6-6"></path></svg></div>
 <sc-for list="{{stopTimes}}" as="x" hint-placeholder-count="3">
 <div style="{{x.st}}"><div style="font-weight:900;font-size:28px;letter-spacing:-.02em;min-width:90px">{{x.t}}</div><div style="font-weight:500;color:#334155">{{x.label}} · {{x.dir}}</div><div style="margin-left:auto;font-weight:900;font-size:20px">{{x.rel}}</div></div>
 </sc-for>
@@ -201,13 +201,13 @@ section{scroll-margin-top:20px}
 <sc-if value="{{zoomOpen}}" hint-placeholder-val="{{ false }}">
 <div role="dialog" aria-modal="true" aria-label="출발 위치 지도" style="position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.94);display:flex;flex-direction:column">
 <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px;color:#fff">
-<div><div style="font-weight:900;font-size:20px">특별운송 회차별 출발위치</div><div style="font-size:14px;opacity:.85">휴대폰은 그림을 길게 누르면 저장할 수 있어요</div></div>
+<div><div style="font-weight:900;font-size:20px">특별운송 회차별 출발위치</div><div style="font-size:14px;opacity:.85">그림을 한 번 누르면 닫혀요 · 길게 누르면 저장할 수 있어요</div></div>
 <div style="display:flex;flex-wrap:wrap;gap:8px">
 <button class="btn" onClick="{{toggleZoom}}">{{zoomLabel}}</button>
 <a href="{{mapSrc}}" download="특별운송_회차별_출발위치.jpg" style="min-height:52px;display:inline-flex;align-items:center;padding:0 22px;border-radius:999px;background:#FDE047;color:#0F172A;font-weight:900;text-decoration:none">저장하기</a>
-<button class="btn" onClick="{{closeZoom}}">닫기</button>
+
 </div></div>
-<div style="flex:1;overflow:auto;padding:0 16px 16px"><img src="{{mapSrc}}" alt="영종복합문화센터 주변 회차별 출발 위치 지도" style="{{zoomImgSt}}"></div>
+<div style="flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:0 16px 8px;cursor:zoom-out"><img src="{{mapSrc}}" onClick="{{closeZoom}}" alt="영종복합문화센터 주변 회차별 출발 위치 지도. 누르면 닫혀요" style="{{zoomImgSt}}"></div><div style="display:flex;justify-content:center;padding:8px 16px calc(16px + env(safe-area-inset-bottom,0px))"><button class="btn" onClick="{{closeZoom}}" style="min-width:160px;min-height:60px;font-size:22px;background:#fff;color:#0F172A">닫기</button></div>
 </div>
 </sc-if>
 </main>
