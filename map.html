@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>영종 장애인특별운송 노선 지도</title>
+<style>
+  :root { --ink:#1b2a3a; --line:#d9dee4; --accent:#fee500; --pin:#1b4f8a; --bg:#fff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif; color:var(--ink); background:var(--bg); }
+  h1 { font-size:22px; margin:16px 16px 8px; }
+  .tabs { display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; }
+  .tabs button { flex:0 0 auto; min-width:64px; height:52px; font-size:20px; font-weight:700; border:2px solid var(--ink); background:#fff; color:var(--ink); border-radius:10px; }
+  .tabs button[aria-pressed="true"] { background:var(--accent); }
+  #map { width:100%; height:55vh; min-height:340px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  ol { list-style:none; margin:0; padding:0; }
+  li { display:flex; gap:12px; align-items:center; padding:14px 16px; border-bottom:1px solid var(--line); font-size:18px; cursor:pointer; }
+  li .n { flex:0 0 34px; height:34px; border-radius:50%; background:var(--pin); color:#fff; font-weight:700; display:grid; place-items:center; }
+  li small { display:block; font-size:15px; color:#556; margin-top:2px; }
+  .pin { width:30px; height:30px; border-radius:50%; background:var(--pin); color:#fff; border:2px solid #fff; font:700 15px/26px sans-serif; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,.4); }
+  .pin.end { background:#c0392b; }
+  .tip { padding:8px 12px; font-size:16px; font-weight:700; white-space:nowrap; }
+  #msg { padding:16px; font-size:18px; }
+</style>
+</head>
+<body>
+<h1>노선 지도</h1>
+<div class="tabs" id="tabs"></div>
+<div id="map"></div>
+<div id="msg"></div>
+<ol id="list"></ol>
+
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ec46521049dc15d08e420b2620965d88
+&autoload=false"></script>
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5Zx-fzW1i7hefcCvRnOa9ByehMRn2fUKyCfQP-vxcH3Ej_t4-4vfD9aqRfMdmz22ppaSb5hPhVnfE/pub?gid=1461771341&single=true&output=csv';
+
+function parseCSV(text) {
+  const rows = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i+1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cur); cur = ''; }
+    else if (c === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
+    else if (c !== '\r') cur += c;
+  }
+  if (cur || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+
+let map, stops = {}, shapes = [], tip;
+
+function show(round) {
+  document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-pressed', b.dataset.r === String(round)));
+  shapes.forEach(s => s.setMap(null)); shapes = [];
+  const list = stops[round] || [];
+  const path = list.map(s => new kakao.maps.LatLng(s.lat, s.lng));
+  const bounds = new kakao.maps.LatLngBounds();
+  shapes.push(new kakao.maps.Polyline({ map, path, strokeWeight:5, strokeColor:'#1b4f8a', strokeOpacity:.75 }));
+  const ol = document.getElementById('list'); ol.innerHTML = '';
+  list.forEach((s, i) => {
+    const pos = path[i]; bounds.extend(pos);
+    const last = i === list.length - 1;
+    const el = document.createElement('div');
+    el.className = 'pin' + (last ? ' end' : ''); el.textContent = s.order;
+    el.onclick = () => focus(s, pos);
+    shapes.push(new kakao.maps.CustomOverlay({ map, position: pos, content: el, yAnchor: .5 }));
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="n">${s.order}</span><div>${s.name}${s.memo ? `<small>${s.memo}</small>` : ''}</div>`;
+    li.onclick = () => { focus(s, pos); document.getElementById('map').scrollIntoView({ behavior:'smooth' }); };
+    ol.appendChild(li);
+  });
+  if (list.length) map.setBounds(bounds, 60, 40, 40, 40);
+  if (tip) tip.setMap(null);
+}
+
+function focus(s, pos) {
+  if (tip) tip.setMap(null);
+  const d = document.createElement('div');
+  d.className = 'tip'; d.style.cssText = 'background:#fff;border:2px solid #1b2a3a;border-radius:8px';
+  d.textContent = s.name + (s.memo ? ' (' + s.memo + ')' : '');
+  tip = new kakao.maps.CustomOverlay({ map, position: pos, content: d, yAnchor: 1.8, zIndex: 10 });
+  map.panTo(pos);
+}
+
+async function start() {
+  try {
+    const res = await fetch(CSV_URL);
+    const rows = parseCSV(await res.text()).slice(1).filter(r => r.length >= 7 && r[0].trim());
+    rows.forEach(r => {
+      const round = r[0].trim();
+      (stops[round] = stops[round] || []).push({ order: +r[1], name: r[3], memo: r[4], lat: +r[5], lng: +r[6] });
+    });
+    Object.values(stops).forEach(a => a.sort((x, y) => x.order - y.order));
+    const rounds = Object.keys(stops).sort((a, b) => a - b);
+    const tabs = document.getElementById('tabs');
+    rounds.forEach(r => {
+      const b = document.createElement('button');
+      b.dataset.r = r; b.textContent = r + '회차'; b.setAttribute('aria-pressed', 'false');
+      b.onclick = () => show(r); tabs.appendChild(b);
+    });
+    map = new kakao.maps.Map(document.getElementById('map'), { center: new kakao.maps.LatLng(37.4900, 126.5300), level: 7 });
+    show(rounds[0]);
+  } catch (e) {
+    document.getElementById('msg').textContent = '지도를 불러오지 못했어요. 인터넷 연결과 카카오 키·도메인 등록을 확인해 주세요.';
+  }
+}
+kakao.maps.load(start);
+</script>
+</body>
+</html>
