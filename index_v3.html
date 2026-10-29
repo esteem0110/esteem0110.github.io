@@ -22,7 +22,7 @@
 <style>
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;background:#FBF7F3;color:#231F20;font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-wrap:break-word;word-break:keep-all}
+body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;background:#FBF7F3;color:#231F20;font-size:19px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;overflow-wrap:break-word;word-break:keep-all}
 .wrap{max-width:760px;margin:0 auto;padding:0 18px}
 @keyframes busblink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(37,99,235,.6)}50%{opacity:.5;box-shadow:0 0 0 14px rgba(37,99,235,0)}}
 .busblink{animation:busblink 1.1s ease-in-out infinite}
@@ -63,8 +63,8 @@ section,div{scroll-margin-top:16px}
 
 <div id="now" style="background:linear-gradient(135deg,{{accent}} 0%,#0A1F52 100%);color:#fff;border-radius:24px;padding:clamp(20px,5vw,32px);display:flex;flex-direction:column;gap:12px">
 <div style="display:inline-flex;align-self:flex-start;align-items:center;gap:8px;background:rgba(255,255,255,.18);border-radius:999px;padding:6px 16px;font-weight:700;font-size:16px">현재 시각 <span style="font-variant-numeric:tabular-nums">{{clockH}}<span class="colon">:</span>{{clockM}}</span></div>
-<div style="font-size:clamp(31px,7.8vw,43px);font-weight:900;line-height:1.2;letter-spacing:-.03em">{{heroTitle}}</div>
-<div style="font-size:clamp(21px,5.2vw,27px);font-weight:500">{{heroSub}}</div>
+<div style="font-size:clamp(31px,7.8vw,43px);font-weight:900;line-height:1.2;letter-spacing:-.045em">{{heroTitle}}</div>
+<div style="{{heroSubSt}}">{{heroSub}}</div>
 <sc-if value="{{hasBoard}}" hint-placeholder-val="{{ true }}">
 <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
 <a href="#departMap" aria-label="타는 곳 위치 지도 보기" style="background:#fff;color:#231F20;border-radius:14px;padding:12px 18px;font-weight:700;text-decoration:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;min-height:56px">타는 곳 · {{heroBoard}}<span style="color:#133583;font-weight:900">위치 보기 ›</span></a>
@@ -84,13 +84,13 @@ section,div{scroll-margin-top:16px}
 <div class="card" aria-live="polite">
 <div class="step" style="flex-wrap:wrap"><span class="stepn">2</span>오는 시간<span style="margin-left:auto;font-size:15px;font-weight:500;color:#4B4448">{{selStop}} 기준</span></div>
 <div style="{{nextBigSt}}">{{nextBig}}</div>
-<div style="color:#4B4448;font-weight:500;margin-top:4px;font-size:16px">{{nextNote}}</div>
+<div style="color:#4B4448;font-weight:500;margin-top:4px;font-size:16px;letter-spacing:-.02em">{{nextNote}}</div>
 <div style="display:flex;align-items:center;gap:10px;margin:18px 0 10px;font-size:25px;font-weight:900"><span class="stepn">3</span>여기서 타세요</div>
 <div style="display:flex;flex-direction:column;gap:10px">
 <sc-for list="{{stopTimes}}" as="x" hint-placeholder-count="3">
 <div style="{{x.st}}">
 <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px">
-<span style="font-weight:900;font-size:clamp(29px,7.8vw,36px);letter-spacing:-.02em">{{x.tk}}</span>
+<span style="font-weight:900;font-size:clamp(30px,8.2vw,38px);letter-spacing:-.04em;line-height:1.15">{{x.tk}}</span>
 <span style="font-weight:700;font-size:17px">{{x.label}} · {{x.dir}}</span>
 </div>
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:6px">
@@ -130,7 +130,7 @@ section,div{scroll-margin-top:16px}
 <section id="runs" style="display:flex;flex-direction:column;gap:14px">
 <div><h1>전체 노선</h1><p class="sub" style="margin:6px 0 0;font-size:clamp(24px,6.3vw,29px);font-weight:900;color:#231F20">출발 시간을 골라 주세요.</p></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-<sc-for list="{{tabs}}" as="t" hint-placeholder-count="6"><button onClick="{{ t.pick }}" aria-pressed="{{t.pressed}}" style="{{t.st}}"><span style="display:block;font-weight:900;font-size:clamp(29px,7.8vw,36px);line-height:1.2">{{t.n}}회차</span><span style="display:block;font-weight:900;font-size:clamp(17px,4.6vw,21px);margin-top:2px">{{t.sub1}}</span><span style="display:block;font-weight:500;font-size:clamp(14px,3.7vw,17px)">{{t.sub2}}</span></button></sc-for>
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="6"><button onClick="{{ t.pick }}" aria-pressed="{{t.pressed}}" style="{{t.st}}"><span style="display:block;font-weight:900;font-size:clamp(29px,7.8vw,36px);line-height:1.2">{{t.n}}회차</span><span style="display:block;font-weight:900;font-size:clamp(17px,4.6vw,21px);margin-top:2px">{{t.sub1}}</span></button></sc-for>
 </div>
 <div style="display:flex;align-items:center;gap:10px;color:#4B4448;font-weight:700;font-size:17px"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" style="flex:none;fill:none;stroke:#133583;stroke-width:2.4;stroke-linecap:round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>정류장마다 서는 시간이 달라요.</div>
 
@@ -180,21 +180,21 @@ section,div{scroll-margin-top:16px}
 <section id="guide" style="display:flex;flex-direction:column;gap:16px">
 <h1>운행 안내</h1>
 
-<div class="card" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:16px 18px">
+<div class="card" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:16px 18px;background:#133583;color:#fff;box-shadow:none">
 <span style="font-size:clamp(24px,6.3vw,29px);font-weight:900">{{todayLabel}}</span>
 <span style="{{pillSt}}">{{pillTxt}}</span>
 </div>
 
 <sc-if value="{{hasClose}}" hint-placeholder-val="{{ true }}">
 <div style="background:#FFF1E0;border-radius:20px;padding:18px 20px;box-shadow:inset 0 0 0 2px #133583">
-<div style="font-size:16px;font-weight:700;color:#9A3412">가까운 쉬는 날</div>
+<div style="font-size:16px;font-weight:700;color:#b91c1c">가까운 쉬는 날</div>
 <div style="font-size:clamp(27px,7.2vw,34px);font-weight:900;color:#231F20;line-height:1.3">{{closeTitle}}</div>
-<div style="font-size:clamp(25px,6.7vw,29px);font-weight:900;color:#133583">버스가 쉬어요</div>
+<div style="font-size:clamp(25px,6.7vw,29px);font-weight:900;color:#b91c1c">버스가 쉬어요</div>
 <div style="font-weight:500;color:#4B4448;font-size:17px">{{closeWhy}}</div>
 </div>
 </sc-if>
 
-<div style="display:flex;align-items:center;gap:10px;background:#FDECEC;color:#9F1239;border-radius:14px;padding:12px 16px;font-weight:900;font-size:19px;box-shadow:inset 0 0 0 2px #9F1239"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none;fill:none;stroke:#9F1239;stroke-width:2.6;stroke-linecap:round"><circle cx="12" cy="12" r="9"></circle><path d="M5.6 5.6l12.8 12.8"></path></svg>토요일·일요일·공휴일에는 쉬어요.</div>
+<div style="display:flex;align-items:center;gap:10px;background:#ede7e2;color:#b91c1c;border-radius:14px;padding:12px 16px;font-weight:900;font-size:19px"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none;fill:none;stroke:#b91c1c;stroke-width:2.6;stroke-linecap:round"><circle cx="12" cy="12" r="9"></circle><path d="M5.6 5.6l12.8 12.8"></path></svg>토요일·일요일·공휴일에는 쉬어요.</div>
 
 <a href="#calendar" class="obtn" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;min-height:60px;font-weight:900;font-size:21px">달력으로 확인하기 ›</a>
 
@@ -335,12 +335,12 @@ const runs=RAW.map(r=>{const st=r[4].split(';').map(x=>{const i=x.lastIndexOf(' 
 const nm=K.getHours()*60+K.getMinutes();
 const op=isOp(Y,M,D);
 const nextDay=()=>{for(let i=1;i<12;i++){const d=new Date(Y,M,D+i);if(isOp(d.getFullYear(),d.getMonth(),d.getDate()))return (d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DN[d.getDay()]+') 첫차 08:44';}return '';};
-let heroTitle,heroSub,heroBoard='',hasBoard=false,heroRun=1;
+let heroTitle,heroSub,heroBoard='',hasBoard=false,heroRun=1,heroOne=false;
 const act=op?runs.find(r=>nm>=mins(r.start)&&nm<=mins(r.end)):null;
 const up=op?runs.find(r=>mins(r.start)>nm):null;
 if(act){const ns=act.stops.find(s=>mins(s.t)>=nm);heroRun=act.n;heroTitle=act.n+'회차 운행 시간이에요';heroSub='다음 정차 예정 · '+ns.name+' '+ns.t;heroBoard=act.board;hasBoard=!!act.board;}
 else if(up){heroRun=up.n;heroTitle='다음 버스는 '+up.n+'회차예요';heroSub=up.start+(up.n===1?' '+up.stops[0].name+' 첫 정차 · ':' 복지관 출발 · ')+fmt(mins(up.start)-nm)+' 뒤';heroBoard=up.board;hasBoard=!!up.board;}
-else{heroTitle=op?'오늘 시간표의 마지막 시간이 지났어요':'오늘은 버스가 쉬어요';heroSub='다음 운행 ▷ '+nextDay();}
+else{heroTitle=op?'오늘 시간표의 마지막 시간이 지났어요':'오늘은 버스가 쉬어요';heroSub='다음 운행 ▷ '+nextDay();heroOne=true;}
 const names=[];runs.forEach(r=>r.stops.forEach(s=>{if(s.name!=='복지관 출발'&&s.name!=='복지관 도착'&&!names.includes(s.name))names.push(s.name);}));
 const selStop=S.stop||names.includes('e편한세상영종')?(S.stop||'e편한세상영종'):names[0];
 let hit=false;
@@ -351,7 +351,7 @@ const stI=kind==='next'?'background:#FFF1E0;box-shadow:inset 0 0 0 3px #133583':
 const chipI=kind==='next'?'background:#133583;color:#fff':'background:#E7E2DD;color:#44403C';
 stopTimes.push({t:s.t,tk:kor(s.t),name:s.name,label:r.n+'회차',dir:r.dir,rel,hasRel:rel!=='',chip,hasChip:chip!=='',chipSt:'font-weight:900;font-size:15px;border-radius:999px;padding:2px 12px;'+chipI,num:'',hasNum:false,dirB:r.dir.indexOf('풍림')===0,go:()=>{this.setState({tab:'route',run:r.n,sel:{run:r.n,i:si},exp:undefined});try{window.scrollTo(0,0);}catch(_){}},st:'border-radius:16px;padding:14px 16px;'+stI});}}));
 const tabsSel=S.run||heroRun;
-const tabs=runs.map(r=>{const on=r.n===tabsSel;return {n:r.n,pick:()=>this.setState({run:r.n,exp:undefined}),sub1:kor(r.start),sub2:r.n===1?'첫 정류장 출발':'복지관 출발',selTxt:'',pressed:on?'true':'false',st:'border:0;font-family:inherit;cursor:pointer;border-radius:18px;padding:12px 6px;line-height:1.3;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;'+(on?'background:#133583;color:#fff':'background:#FFF1E0;color:#133583;box-shadow:inset 0 0 0 2px #EBCBAA')};});
+const tabs=runs.map(r=>{const on=r.n===tabsSel;return {n:r.n,pick:()=>this.setState({run:r.n,exp:undefined}),sub1:kor(r.start),selTxt:'',pressed:on?'true':'false',st:'border:0;font-family:inherit;cursor:pointer;border-radius:18px;padding:12px 6px;line-height:1.3;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;'+(on?'background:#133583;color:#fff':'background:#FFF1E0;color:#133583;box-shadow:inset 0 0 0 2px #EBCBAA')};});
 const cr=runs[tabsSel-1];
 const crAct=op&&nm>=mins(cr.start)&&nm<=mins(cr.end);
 const done=op&&nm>mins(cr.end);
@@ -402,7 +402,7 @@ const runStops=cr.stops.map((s,i)=>{const isE=i===N-1,isF=i===0,isS=i===sel,isN=
 const parts=[];if(isN)parts.push('다음 정차');else if(isLive)parts.push('예정 시각 지남');const chip=parts.join(' · ');
 return {pick:pick(i),t:s.t,name:s.name,aria:s.t+' '+s.name+(isN?', 다음 정차':'')+(isS?', 선택됨':''),isEnd:isE,notEnd:!isE,num:String(i+1),sub,hasSub:sub!=='',chip,hasChip:chip!=='',
 st:'width:100%;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;display:flex;align-items:stretch;gap:8px;padding:0 6px;min-height:92px;border-radius:16px;background:'+(isS?'#FFE8CC':(isN?'#FFF4E8':'transparent')),
-timeSt:'width:62px;flex:none;align-self:center;font-size:16px;font-weight:700;color:#4B4448;font-variant-numeric:tabular-nums',
+timeSt:'width:62px;flex:none;align-self:center;font-size:18px;font-weight:900;letter-spacing:-.03em;color:#133583;font-variant-numeric:tabular-nums',
 railSt:'position:relative;width:52px;flex:none;display:flex;align-items:center;justify-content:center',
 lineSt:'position:absolute;left:50%;margin-left:-3px;width:6px;background:radial-gradient(circle at 50% 50%,'+(isP?'#94A3B8':'#F97316')+' 2.8px,transparent 3.2px) 0 0/6px 12px repeat-y;top:'+(isF?'50%':'0')+';bottom:'+(isE?'50%':'0'),
 dot:'position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:'+(isS?'40px':'34px')+';height:'+(isS?'40px':'34px')+';border-radius:50%;border:3px solid #fff;box-shadow:0 1px 4px rgba(15,23,42,.25);color:#fff;font-size:17px;font-weight:900;background:'+(isN?acc:(isP?'#64748B':'#133583')),
@@ -429,10 +429,10 @@ const goTab=t=>()=>{this.setState({tab:t});try{window.scrollTo(0,0);}catch(_){}}
 const statusTxt=op?'✔ 오늘 운행해요':'✖ 오늘은 버스가 쉬어요';
 const statusNote=op?'시간표 기준 운행 예정일이에요.':(nextDay()?'다음 운행 ▷ '+nextDay():'');
 const statusSt='border-radius:18px;padding:14px 18px;'+(op?'background:#15803D;color:#fff':'background:#FDECEC;color:#9F1239;box-shadow:inset 0 0 0 2px #9F1239');
-const pillSt='border-radius:999px;padding:4px 14px;font-weight:900;font-size:16px;'+(op?'background:#DCFCE7;color:#166534;box-shadow:inset 0 0 0 2px #166534':'background:#FDECEC;color:#9F1239;box-shadow:inset 0 0 0 2px #9F1239');
+const pillSt='border-radius:999px;padding:4px 14px;font-weight:900;font-size:16px;'+'background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 2px #fff';
 const nxRow=stopTimes.find(x=>x.chip==='다음 예정');
 const nextBig=nxRow?nxRow.tk:(op?'오늘 시간표의 마지막 시간이 지났어요':'오늘은 버스가 쉬어요');
-const nextBigSt=nxRow?'font-size:clamp(38px,11.2vw,49px);font-weight:900;letter-spacing:-.03em;line-height:1.2;color:#133583':'font-size:clamp(27px,7.2vw,34px);font-weight:900;line-height:1.3;color:#133583';
+const nextBigSt=nxRow?'font-size:clamp(40px,11.4vw,52px);font-weight:900;letter-spacing:-.045em;line-height:1.1;color:#133583':'font-size:clamp(27px,7.2vw,34px);font-weight:900;line-height:1.3;color:#133583';
 const nextNote=nxRow?'시간표 기준 · '+nxRow.rel+' · 늦게 올 수도 있어요.':(op?'궁금한 점은 아래 전화하기로 문의해 주세요.':(nextDay()?'다음 운행 ▷ '+nextDay():''));
 let hasClose=false,closeTitle='',closeWhy='';
 for(let i=1;i<=60&&!hasClose;i++){const d=new Date(Y,M,D+i),w=d.getDay(),yy=d.getFullYear(),mm=d.getMonth(),dd=d.getDate(),k=key(yy,mm,dd);if(w>0&&w<6&&!isOp(yy,mm,dd)){hasClose=true;closeTitle=(mm+1)+'월 '+dd+'일 '+DN[w]+'요일';closeWhy=X[k]?'사유: '+X[k]:(H.has(k)?'사유: 공휴일':'운행하지 않는 날이에요.');}}
@@ -452,7 +452,7 @@ navStopSt:navSt(tabV==='stop'),navRouteSt:navSt(tabV==='route'),navInfoSt:navSt(
 statusTxt,statusSt,statusNote,hasStatusNote:statusNote!=='',pillSt,pillTxt:op?'✔ 오늘 운행해요':'✖ 오늘은 쉬어요',nextBig,nextBigSt,nextNote,
 hasClose,closeTitle,closeWhy,todayLabel:(M+1)+'월 '+D+'일 '+DN[K.getDay()]+'요일',goToday:()=>this.setState({vy:Y,vm:M,sd:key(Y,M,D)}),
 hasDone:done,hasMore,toggleMore:()=>this.setState({exp:!showAll}),moreLabel:showAll?'정류장 목록 접기':'나머지 정류장 보기 ('+(N-4)+'곳)',moreExp:showAll?'true':'false',
-accent:acc,clock:pad(K.getHours())+':'+pad(K.getMinutes()),clockH:pad(K.getHours()),clockM:pad(K.getMinutes()),mapSrc:MAPURI,zoomOpen:!!S.zoom,openZoom:()=>this.setState({zoom:true,zin:false}),closeZoom:()=>this.setState({zoom:false}),toggleZoom:()=>this.setState({zin:!S.zin}),zoomLabel:S.zin?'작게 보기':'확대해서 보기',zoomImgSt:S.zin?'width:220%;max-width:none;height:auto;display:block;border-radius:12px':'width:100%;max-width:1100px;height:auto;display:block;margin:0 auto;border-radius:12px',heroTitle,heroSub,heroBoard,hasBoard,
+accent:acc,clock:pad(K.getHours())+':'+pad(K.getMinutes()),clockH:pad(K.getHours()),clockM:pad(K.getMinutes()),mapSrc:MAPURI,zoomOpen:!!S.zoom,openZoom:()=>this.setState({zoom:true,zin:false}),closeZoom:()=>this.setState({zoom:false}),toggleZoom:()=>this.setState({zin:!S.zin}),zoomLabel:S.zin?'작게 보기':'확대해서 보기',zoomImgSt:S.zin?'width:220%;max-width:none;height:auto;display:block;border-radius:12px':'width:100%;max-width:1100px;height:auto;display:block;margin:0 auto;border-radius:12px',heroTitle,heroSub,heroSubSt:heroOne?'font-size:clamp(13px,4.1vw,20px);font-weight:700;letter-spacing:-.03em;white-space:nowrap;line-height:1.4':'font-size:clamp(21px,5.2vw,27px);font-weight:500;letter-spacing:-.01em;line-height:1.4',heroBoard,hasBoard,
 stopOpts:names.map(v=>({v})),selStop,pickStop:e=>this.setState({stop:e.target.value}),stopTimes,
 boardRuns:runs.filter(r=>r.n!==1),runLead,tabs,pins,mapInSt,mapBoxSt,mapDown,mapMove,mapUp,hasBus:!!bus,busSt,hasMapNote,mapNote,isRun1:R1,notRun1:!R1,map1Src:'',mapCredit:R1?'구글지도 위에 정류장 번호를 표시했어요. 먼저 왼쪽 하늘도시를 돌고, 오른쪽 신도시를 지나 풍림1차205동에서 고속도로로 나와 영종복합문화센터에 도착해요. 붉은 선·노란 선이 버스가 다니는 길이고, 점선 테두리는 대략적인 위치예요.':'네이버 지도 위에 정류장 위치를 표시했어요. 점선 테두리 표시는 대략적인 위치예요. 손가락이나 마우스로 끌어서 지도를 움직일 수 있어요. 지도에 없는 정류장은 아래 목록에서 확인하세요.',toggleMapZoom:()=>this.setState({mz:!S.mz}),mapZoomLabel:S.mz?'크게 보기':'넓게 보기',selName:cs.name,stopSub:selSub+(sid?' · 정류장 번호 '+sid:''),showLinks:!selEnd,naverUrl:'https://map.naver.com/p/search/'+qs,googleUrl:'https://www.google.com/maps/search/?api=1&query='+qs,runN:cr.n,runDir:cr.dir,runStart:cr.start,runEnd:cr.end,runStops:visStops,runs,
 monthLabel:vy+'년 '+(vm+1)+'월',cells,prevM,nextM,
