@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>버스 위치 전송 (기사님용)</title>
+<style>
+body{margin:0;font-family:-apple-system,'Noto Sans KR',sans-serif;background:#F5F6FA;color:#252A34;text-align:center;padding:24px}
+h1{font-size:26px;color:#294A91;margin:8px 0 20px}
+button{width:100%;max-width:420px;min-height:84px;font-size:28px;font-weight:900;border:0;border-radius:20px;background:#294A91;color:#fff}
+button.stop{background:#B91C1C}
+#st{margin-top:24px;font-size:22px;line-height:1.6}
+.ok{color:#166534;font-weight:900}.bad{color:#B91C1C;font-weight:900}
+</style>
+</head>
+<body>
+<h1>🚌 버스 위치 전송</h1>
+<button id="btn">운행 시작 (위치 보내기)</button>
+<div id="st">버튼을 누르면 위치 전송이 시작돼요.<br>운행 중에는 화면을 켜 두세요.</div>
+<script>
+// ▼ 아래 두 줄만 바꾸세요
+const URL_  = '여기에_Apps_Script_웹앱_주소(…/exec)';
+const KEY   = '여기에_비밀번호'; // Code.gs의 KEY와 같게
+const EVERY = 10000; // 10초마다 전송
+
+let watch=null, timer=null, last=null, wake=null, sent=0;
+const $=id=>document.getElementById(id);
+
+async function keepAwake(){ try{ if('wakeLock' in navigator) wake=await navigator.wakeLock.request('screen'); }catch(_){} }
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&watch!==null) keepAwake(); });
+
+function send(){
+  if(!last) return;
+  fetch(URL_,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({key:KEY,lat:last.latitude,lng:last.longitude,acc:Math.round(last.accuracy||0)})})
+  .then(()=>{ sent++; $('st').innerHTML='<span class="ok">● 위치 전송 중</span><br>보낸 횟수 '+sent+'회<br>마지막 '+new Date().toLocaleTimeString('ko-KR'); })
+  .catch(()=>{ $('st').innerHTML='<span class="bad">전송 실패 – 인터넷을 확인하세요</span>'; });
+}
+
+function start(){
+  if(!navigator.geolocation){ $('st').innerHTML='<span class="bad">이 폰은 위치 기능을 지원하지 않아요</span>'; return; }
+  $('st').textContent='위치를 찾는 중이에요… (위치 허용을 눌러주세요)';
+  watch=navigator.geolocation.watchPosition(p=>{ last=p.coords; },
+    e=>{ $('st').innerHTML='<span class="bad">위치를 가져올 수 없어요. 위치 권한을 허용해 주세요.</span>'; },
+    {enableHighAccuracy:true,maximumAge:5000,timeout:20000});
+  timer=setInterval(send,EVERY); keepAwake();
+  $('btn').textContent='운행 종료 (전송 멈춤)'; $('btn').className='stop';
+}
+function stop(){
+  navigator.geolocation.clearWatch(watch); clearInterval(timer); watch=null; last=null;
+  try{ wake&&wake.release(); }catch(_){}
+  $('btn').textContent='운행 시작 (위치 보내기)'; $('btn').className='';
+  $('st').textContent='위치 전송을 멈췄어요.';
+}
+$('btn').onclick=()=>{ watch===null?start():stop(); };
+</script>
+</body>
+</html>
