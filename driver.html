@@ -31,10 +31,15 @@ document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&watch!==
 
 function send(){
   if(!last) return;
-  fetch(URL_,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+  fetch(URL_,{method:'POST',headers:{'Content-Type':'text/plain'},
     body:JSON.stringify({key:KEY,lat:last.latitude,lng:last.longitude,acc:Math.round(last.accuracy||0)})})
-  .then(()=>{ sent++; $('st').innerHTML='<span class="ok">● 위치 전송 중</span><br>보낸 횟수 '+sent+'회<br>마지막 '+new Date().toLocaleTimeString('ko-KR'); })
-  .catch(()=>{ $('st').innerHTML='<span class="bad">전송 실패 – 인터넷을 확인하세요</span>'; });
+  .then(r=>r.json())
+  .then(j=>{
+    if(j.ok){ sent++; $('st').innerHTML='<span class="ok">● 위치 전송 중</span><br>보낸 횟수 '+sent+'회<br>마지막 '+new Date().toLocaleTimeString('ko-KR'); }
+    else { $('st').innerHTML='<span class="bad">서버가 거부했어요 – 비밀번호(KEY)가 다른지 확인하세요</span>'; }
+  })
+  .catch(()=>{ $('st').innerHTML='<span class="bad">전송 실패 – 주소(URL_)나 배포 설정을 확인하세요</span>'; });
+}
 }
 
 function start(){
