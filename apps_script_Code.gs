@@ -1,7 +1,7 @@
 // 실시간 버스 위치 받는 구글 Apps Script
 // 정류장 구글시트에서 [확장 프로그램 > Apps Script]로 열어 붙여넣으세요.
 
-const KEY = '여기에_비밀번호'; // driver.html의 KEY와 똑같이 맞추세요 (영문·숫자 추천)
+const KEY = '6694'; // driver.html의 KEY와 똑같이 맞추세요 (영문·숫자 추천)
 
 function doPost(e) {
   try {
