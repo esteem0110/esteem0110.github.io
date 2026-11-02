@@ -18,10 +18,9 @@ button.stop{background:#B91C1C}
 <button id="btn">운행 시작 (위치 보내기)</button>
 <div id="st">버튼을 누르면 위치 전송이 시작돼요.<br>운행 중에는 화면을 켜 두세요.</div>
 <script>
-// ▼ 아래 두 줄만 바꾸세요
-const URL_  = 'https://script.google.com/macros/s/AKfycbyXVUin1AiXssddvyaACWkJeaMCnos_ib4PA4OfoyPj9lDg_SPffrMCzTP8SMvX36gu/exec';
-const KEY   = '6694'; // Code.gs의 KEY와 같게
-const EVERY = 10000; // 10초마다 전송
+const URL_  = 'https://script.google.com/macros/s/AKfycbx95sdaatlcRU4x3S2YltgP_g3IsYXQ1eG9doPWXT0VoRl-kt60cjjR239enmfuvxdW/exec';
+const KEY   = '6694';
+const EVERY = 10000;
 
 let watch=null, timer=null, last=null, wake=null, sent=0;
 const $=id=>document.getElementById(id);
@@ -39,7 +38,6 @@ function send(){
     else { $('st').innerHTML='<span class="bad">서버가 거부했어요 – 비밀번호(KEY)가 다른지 확인하세요</span>'; }
   })
   .catch(()=>{ $('st').innerHTML='<span class="bad">전송 실패 – 주소(URL_)나 배포 설정을 확인하세요</span>'; });
-}
 }
 
 function start(){
