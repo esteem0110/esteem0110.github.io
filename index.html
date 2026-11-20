@@ -590,7 +590,7 @@ const pillSt='border-radius:999px;padding:4px 14px;font-weight:900;font-size:16p
 const nxRow=stopTimes.find(x=>x.chip==='다음 예정');
 const nextBig=nxRow?kor(nxRow.t):(op?'오늘 시간표의 마지막 시간이 지났어요':'오늘은 버스가 쉬어요');
 const nextBigSt=nxRow?'font-size:clamp(40px,11.4vw,52px);font-weight:900;letter-spacing:-.045em;line-height:1.1;color:#294A91':'font-size:clamp(27px,7.2vw,34px);font-weight:900;line-height:1.3;color:#294A91';
-const nextNote=nxRow?'시간표 기준 · '+nxRow.rel+' · 늦게 올 수도 있어요.':(op?'궁금한 점은 아래 전화하기로 문의해 주세요.':(nextDay()?'다음 운행 ▷ '+nextDay():''));
+const nextNote=nxRow?'시간표 기준 · '+nxRow.rel+' · 일찍 지나갈 수도 있어요.':(op?'궁금한 점은 아래 전화하기로 문의해 주세요.':(nextDay()?'다음 운행 ▷ '+nextDay():''));
 let hasClose=false,closeTitle='',closeWhy='';
 for(let i=1;i<=60&&!hasClose;i++){const d=new Date(Y,M,D+i),w=d.getDay(),yy=d.getFullYear(),mm=d.getMonth(),dd=d.getDate(),k=key(yy,mm,dd);if(w>0&&w<6&&!isOp(yy,mm,dd)){hasClose=true;closeTitle=(mm+1)+'월 '+dd+'일 '+DN[w]+'요일';closeWhy=X[k]?(String(X[k]).replace(/\s/g,'')==='기관내부사정'?'':'사유: '+X[k]):(H.has(k)?'사유: 공휴일':'운행하지 않는 날이에요.');}}
 const selWd=sdt.getDay(),selWk=selWd===0||selWd===6;
